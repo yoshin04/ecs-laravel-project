@@ -1,37 +1,20 @@
 version: 2.1
 orbs:
-  aws-ecr: circleci/aws-ecr@1.0.0
-  aws-ecs: circleci/aws-ecs@0.0.6
-
-executors:
-  docker_build:
-    machine:
-      docker_layer_caching: true #キャッシュを有効化
-
+  aws-ecr: circleci/aws-ecr@0.0.2
+  aws-ecs: circleci/aws-ecs@0.0.10
 workflows:
   build-and-deploy:
     jobs:
-      - build
       - aws-ecr/build_and_push_image:
-        executor: docker_build
-        name: 'build-stating'
-        account-url: 721817511144.dkr.ecr.ap-northeast-1.amazonaws.com/laravelapp:latest #ECRのリポジトリ名
-        path: ./
-        dockerfile: Dockerfile #ビルドに使用したいDockerfile
-        requires:
-          -build
-        filters:
-          branches:
-            only:
-              - develop #developブランチにpushがあった時のみ発火
+        account-url: "${AWS_ACOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        repo: "${AWS_RESOURCE_NAME_PREFIX}"
+        region: ${AWS_DEFAULT_REGION}
+        tag: "${CIRCLE_SHA1}"
+
       - aws-ecs/deploy-service-update:
         requires:
-          - build-staging
-        family: 'laravel-fagate-task'
-        service-name: 'laravel-fargate-service'
-        cluster-name: 'laravel-fagate'
-        container-image-name-updates: 'container=laravel-fargate-task,image-and-tag=${AWS_ECR_ACCOUNT_URL}/721817511144.dkr.ecr.ap-northeast-1.amazonaws.com/laravelapp:latest'
-        filters:
-          branches:
-            only:
-              - develop
+          - aws-ecr/build_and_push_image
+        aws-region: ${AWS_DEFAULT_REGION}
+        family: "${AWS_RESOURCE_NAME_PREFIX}-service"
+        cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
+        container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=${CIRCLE_SHA1}"
