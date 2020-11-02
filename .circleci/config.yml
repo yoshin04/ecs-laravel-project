@@ -15,6 +15,5 @@ workflows:
             - aws-ecr/build_and_push_image
           aws-region: ${AWS_DEFAULT_REGION}
           family: "laravel-fagate-task"
-          service-name: "laravel-fargate-service"
           cluster-name: "laravel-fagate"
-          container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=${CIRCLE_SHA1}"
+          container-image-name-updates: "container=laravel-fargate-service,tag=${CIRCLE_SHA1}"
