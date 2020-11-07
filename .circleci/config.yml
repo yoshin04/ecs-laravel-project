@@ -5,12 +5,19 @@ orbs:
 workflows:
   build-and-deploy:
     jobs:
-      - run: docker-compose --build
       - aws-ecr/build_and_push_image:
           account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
           repo: "${AWS_RESOURCE_NAME_PREFIX}"
           region: ${AWS_DEFAULT_REGION}
           tag: "latest"
+          path: ./
+          dockerfile: yoshin04/laravelproject
+          requires:
+            - build
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build_and_push_image
@@ -19,8 +26,8 @@ workflows:
           service-name: "laravel-fargate-service"
           cluster-name: "laravel-fagate"
           container-image-name-updates: "container=app,tag=latest"
-          filters:
-            branches:
-              only:
-                - master
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
 
