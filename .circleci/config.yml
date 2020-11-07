@@ -11,7 +11,7 @@ workflows:
           region: ${AWS_DEFAULT_REGION}
           tag: "latest"
           path: ./
-          dockerfile: yoshin04/laravelproject
+          dockerfile: Dockerfile
           requires:
             - build
           # filters:
