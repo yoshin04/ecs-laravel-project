@@ -7,7 +7,6 @@ workflows:
     jobs:
       - aws-ecr/build_and_push_image:
           account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-          context: .
           repo: "${AWS_RESOURCE_NAME_PREFIX}"
           region: ${AWS_DEFAULT_REGION}
           tag: "latest"
