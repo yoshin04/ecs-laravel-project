@@ -3,22 +3,23 @@ orbs:
   aws-ecr: circleci/aws-ecr@6.7.0
   aws-ecs: circleci/aws-ecs@1.1.0
 workflows:
-  # nginx-deploy:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-  #         repo: "nginx"
-  #         region: ${AWS_DEFAULT_REGION}
-  #         tag: "${CIRCLE_SHA1}"
-  #         dockerfile: Dockerfile_Nginx
-  #     - aws-ecs/deploy-service-update:
-  #         requires:
-  #           - aws-ecr/build_and_push_image
-  #         aws-region: ${AWS_DEFAULT_REGION}
-  #         family: "laravel-fagate-task"
-  #         service-name: "laravel-fargate-service"
-  #         cluster-name: "laravel-fagate"
-  #         container-image-name-updates: "container=nginx,tag=latest"
+  nginx-deploy:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          repo: "nginx"
+          region: ${AWS_DEFAULT_REGION}
+          tag: "${CIRCLE_SHA1}"
+          dockerfile: Dockerfile_Nginx
+          path: ./
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          aws-region: ${AWS_DEFAULT_REGION}
+          family: "laravel-fagate-task"
+          service-name: "laravel-fargate-service"
+          cluster-name: "laravel-fagate"
+          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:${CIRCLE_SHA1}"
   #         # filters:
   #         #   branches:
   #         #     only:
