@@ -6,7 +6,7 @@ workflows:
   nginx-deploy:
     jobs:
       - aws-ecr/build-and-push-image:
-          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          account-url: "721817511144.dkr.ecr.ap-northeast-1.amazonaws.com"
           repo: "nginx"
           region: ${AWS_DEFAULT_REGION}
           tag: "latest"
