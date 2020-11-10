@@ -2,21 +2,27 @@ version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@6.7.0
   aws-ecs: circleci/aws-ecs@1.1.0
-jobs:
-  build:
-    - run:
-      name: Docker-compose
-      command: |
-        curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-        chmod +x ~/docker-compose
-        sudo mv ~/docker-compose /usr/local/bin/docker-compose
-    - run:
-      name: docker-compose start-up
-      command: |
-        set -x
-        docker-compose up -d --build
-        dokcer-compose down
 workflows:
+  nginx-deploy:
+    jobs:
+      - build:
+      - aws-ecr/build_and_push_image:
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          repo: "nginx"
+          region: ${AWS_DEFAULT_REGION}
+          tag: "latest"
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build_and_push_image
+          aws-region: ${AWS_DEFAULT_REGION}
+          family: "laravel-fagate-task"
+          service-name: "laravel-fargate-service"
+          cluster-name: "laravel-fagate"
+          container-image-name-updates: "container=nginx,tag=latest"
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
   laravelapp-deploy:
     jobs:
       - build:
