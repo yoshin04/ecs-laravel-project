@@ -10,6 +10,7 @@ workflows:
           repo: "nginx"
           region: ${AWS_DEFAULT_REGION}
           tag: "latest"
+          dockerfile: Dockerfile_Nginx
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build_and_push_image
