@@ -12,11 +12,9 @@ workflows:
           context: .
           create-repo: true
           dockerfile: Dockerfile_Nginx
-          no-output-timeout: 20m
           path: ./
           region: ${AWS_DEFAULT_REGION}
           repo: nginx
-          skip-when-tags-exist: false
           tag: 'latest'
       - aws-ecs/deploy-service-update:
           requires:
