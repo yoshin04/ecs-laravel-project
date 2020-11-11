@@ -10,7 +10,7 @@ workflows:
           context: .
           create-repo: true
           dockerfile: ./Dockerfile_Nginx
-          region: ${AWS_DEFAULT_REGION}
+          region: AWS_REGION
           repo: nginx
           tag: 'latest'
       - aws-ecs/deploy-service-update:
