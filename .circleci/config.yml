@@ -12,7 +12,7 @@ workflows:
           context: .
           create-repo: true
           dockerfile: Dockerfile_Nginx
-          path: ./
+          path: ../
           region: ${AWS_DEFAULT_REGION}
           repo: nginx
           tag: 'latest'
