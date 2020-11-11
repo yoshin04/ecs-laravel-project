@@ -11,8 +11,7 @@ workflows:
           aws-secret-access-key: "${AWS_SECRET_ACCESS_KEY}"
           context: .
           create-repo: true
-          dockerfile: Dockerfile_Nginx
-          path: ../
+          dockerfile: ./Dockerfile_Nginx
           region: ${AWS_DEFAULT_REGION}
           repo: nginx
           tag: 'latest'
