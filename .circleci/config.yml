@@ -6,11 +6,11 @@ workflows:
   nginx-deploy:
     jobs:
       - aws-ecr/build-and-push-image:
-          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com"
           context: .
           create-repo: true
           dockerfile: ./Dockerfile_Nginx
-          region: ${AWS_DEFAULT_REGION}
+          region: ap-northeast-1
           repo: nginx
           tag: 'latest'
       - aws-ecs/deploy-service-update:
