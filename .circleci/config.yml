@@ -18,7 +18,7 @@ workflows:
           family: "laravel-fagate-task"
           service-name: "laravel-fargate-service"
           cluster-name: "laravel-fagate"
-          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/app:latest"
+          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/laravelapp:latest"
           # filters:
           #   branches:
           #     only:
@@ -38,7 +38,7 @@ workflows:
           family: "laravel-fagate-task"
           service-name: "laravel-fargate-service"
           cluster-name: "laravel-fagate"
-          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:latest"
+          container-image-name-updates: "container=nginx,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:latest"
   #         # filters:
   #         #   branches:
   #         #     only:
