@@ -12,13 +12,13 @@ workflows:
           repo: laravelapp
           tag: 'latest'
       - aws-ecs/deploy-service-update:
+        - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          aws-region: ${AWS_DEFAULT_REGION}
           family: "laravel-fagate-task"
           service-name: "laravel-fargate-service"
           cluster-name: "laravel-fagate"
-          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/laravelapp:${CIRCLE_SHA1}"
+          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/app:latest"
           # filters:
           #   branches:
           #     only:
@@ -38,7 +38,7 @@ workflows:
           family: "laravel-fagate-task"
           service-name: "laravel-fargate-service"
           cluster-name: "laravel-fagate"
-          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:${CIRCLE_SHA1}"
+          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:latest"
   #         # filters:
   #         #   branches:
   #         #     only:
