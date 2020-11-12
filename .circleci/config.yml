@@ -12,7 +12,6 @@ workflows:
           repo: laravelapp
           tag: 'latest'
       - aws-ecs/deploy-service-update:
-        - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
           family: "laravel-fagate-task"
