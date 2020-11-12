@@ -7,9 +7,8 @@ workflows:
     jobs:
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL
-          build:
-            dockerfile: Dockerfile_Nginx
-            context: .
+          dockerfile: Dockerfile_Nginx
+          context: ./blog
           region: AWS_REGION
           repo: nginx
           tag: 'latest'
