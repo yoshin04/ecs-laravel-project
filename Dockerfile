@@ -24,6 +24,7 @@ RUN apk add autoconf && pecl install -o -f redis \
   && docker-php-ext-enable redis && apk del autoconf
 
 COPY ./config/php/local.ini /usr/local/etc/php/conf.d/local.ini
+COPY ./ /var/www
 
 RUN addgroup -g 1000 -S www && \
   adduser -u 1000 -S www -G www
