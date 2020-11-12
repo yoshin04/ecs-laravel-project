@@ -2,6 +2,8 @@ FROM php:7.3-fpm-alpine
 
 WORKDIR /var/www
 
+RUN cd /usr/bin && curl -s http://getcomposer.org/installer | php && ln -s /usr/bin/composer.phar /usr/bin/composer
+
 RUN apk update && apk add \
     build-base \
     freetype-dev \
@@ -24,7 +26,6 @@ RUN apk add autoconf && pecl install -o -f redis \
   && docker-php-ext-enable redis && apk del autoconf
 
 COPY ./config/php/local.ini /usr/local/etc/php/conf.d/local.ini
-COPY ./ /var/www
 
 RUN addgroup -g 1000 -S www && \
   adduser -u 1000 -S www -G www
