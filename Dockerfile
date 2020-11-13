@@ -2,8 +2,6 @@ FROM php:7.3-fpm-alpine
 
 WORKDIR /var/www
 
-RUN cd /usr/bin && curl -s http://getcomposer.org/installer | php && ln -s /usr/bin/composer.phar /usr/bin/composer
-
 RUN apk update && apk add \
     build-base \
     freetype-dev \
