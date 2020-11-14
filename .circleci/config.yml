@@ -5,9 +5,11 @@ orbs:
 jobs:
   build:
     docker:
-     - image: circleci/php:7.3-node-browsers
-    steps:
-    - checkout
+      - image: yoshin04/laravelproject
+        auth:
+          username: yoshin04
+          password: $DOCKERHUB_PASSWORD
+
 workflows:
   laravelapp-deploy:
     jobs:
