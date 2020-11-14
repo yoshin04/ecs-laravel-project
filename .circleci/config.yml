@@ -5,8 +5,8 @@ orbs:
 build:
   docker:
     - image: circleci/php:7.3-node-browsers
-    steps:
-      - checkout
+  steps:
+    - checkout
 workflows:
   laravelapp-deploy:
     jobs:
