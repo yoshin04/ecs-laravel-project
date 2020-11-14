@@ -3,22 +3,22 @@ orbs:
   aws-ecr: circleci/aws-ecr@6.14.0
   aws-ecs: circleci/aws-ecs@1.1.0
 workflows:
-  laravelapp-deploy:
-    jobs:
-      - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL
-          dockerfile: Dockerfile
-          path: .
-          region: AWS_REGION
-          repo: laravelapp
-          tag: 'latest'
-      - aws-ecs/deploy-service-update:
-          requires:
-            - aws-ecr/build-and-push-image
-          family: "laravel-fagate-task"
-          service-name: "laravel-fargate-service"
-          cluster-name: "laravel-fagate"
-          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/laravelapp:latest"
+  # laravelapp-deploy:
+  #   jobs:
+  #     - aws-ecr/build-and-push-image:
+  #         account-url: AWS_ECR_ACCOUNT_URL
+  #         dockerfile: Dockerfile
+  #         path: .
+  #         region: AWS_REGION
+  #         repo: laravelapp
+  #         tag: 'latest'
+  #     - aws-ecs/deploy-service-update:
+  #         requires:
+  #           - aws-ecr/build-and-push-image
+  #         family: "laravel-fagate-task"
+  #         service-name: "laravel-fargate-service"
+  #         cluster-name: "laravel-fagate"
+  #         container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/laravelapp:latest"
           # filters:
           #   branches:
           #     only:
