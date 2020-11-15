@@ -1,26 +1,59 @@
 version: 2.1
 orbs:
-  aws-ecr: circleci/aws-ecr@0.0.2
-  aws-ecs: circleci/aws-ecs@0.0.10
+  aws-ecr: circleci/aws-ecr@6.14.0
+  aws-ecs: circleci/aws-ecs@1.1.0
+jobs:
+  build:
+    docker:
+      - image: yoshin04/laravelproject
+        auth:
+          username: yoshin04
+          password: $DOCKERHUB_PASSWORD
+      - run: docker build -t yoshin04/laravelproject .
+
+
 workflows:
-  build-and-deploy:
+  laravelapp-deploy:
     jobs:
-      - run: docker-compose --build
-      - aws-ecr/build_and_push_image:
-          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-          repo: "${AWS_RESOURCE_NAME_PREFIX}"
-          region: ${AWS_DEFAULT_REGION}
-          tag: "latest"
+      - build
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          dockerfile: Dockerfile
+          path: .
+          region: AWS_REGION
+          repo: laravelapp
+          tag: 'latest'
       - aws-ecs/deploy-service-update:
           requires:
-            - aws-ecr/build_and_push_image
-          aws-region: ${AWS_DEFAULT_REGION}
+            - aws-ecr/build-and-push-image
           family: "laravel-fagate-task"
           service-name: "laravel-fargate-service"
           cluster-name: "laravel-fagate"
-          container-image-name-updates: "container=app,tag=latest"
-          filters:
-            branches:
-              only:
-                - master
+          container-image-name-updates: "container=app,image-and-tag=${AWS_ECR_ACCOUNT_URL}/laravelapp:latest"
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
+
+  nginx-deploy:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          dockerfile: Dockerfile_Nginx
+          path: .
+          region: AWS_REGION
+          repo: nginx
+          tag: 'latest'
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          family: "laravel-fagate-task"
+          service-name: "laravel-fargate-service"
+          cluster-name: "laravel-fagate"
+          container-image-name-updates: "container=nginx,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:latest"
+  #         # filters:
+  #         #   branches:
+  #         #     only:
+  #         #       - master
+ 
 
