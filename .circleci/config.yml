@@ -9,6 +9,8 @@ jobs:
         auth:
           username: yoshin04
           password: $DOCKERHUB_PASSWORD
+      - run: docker build -t yoshin04/laravelproject .
+
 
 workflows:
   laravelapp-deploy:
